@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+from ev3dev2.motor import MoveTank, OUTPUT_A, OUTPUT_D
+from ev3dev2.sensor.lego import ColorSensor
+from ev3dev2.sensor import INPUT_1, INPUT_4
+from time import sleep
+from ev3dev2.display import Display
+from ev3dev2.sound import Sound
+
+# Create your objects here.
+#ev3 = EV3Brick()
+
+spk = Sound()
+spk.speak('Start.')
+
+# Write your program here.
+#ev3.speaker.beep()
+lcd=Display()
+
+cs1 = ColorSensor(INPUT_1)
+cs4 = ColorSensor(INPUT_4)
+#Am = Motor(OUTPUT_A)
+#Dm = Motor(OUTPUT_D)
+rbt=MoveTank(OUTPUT_A,OUTPUT_D)
+#60,4 OK
+pw = 60
+mg = 5
+sencor_priset_left = 0
+sencor_priset_right = 0
+sp1 = ()
+sp2 = ()
+
+while True:
+
+ #TODO
+ #   lcd.text_pixels(str(cs1.reflected_light_intensity)+"  ,  "+str(cs4.reflected_light_intensity), True, 30, 10, font='lubB24')
+ #   lcd.update()
+    sp1 = pw - (( (cs4.reflected_light_intensity + sencor_priset_right)  - (cs1.reflected_light_intensity + sencor_priset_left) ) * mg)
+    sp2 = pw + (( (cs4.reflected_light_intensity + sencor_priset_right)  - (cs1.reflected_light_intensity + sencor_priset_left) ) * mg)
+#    print('%s , %s' % (sp1,sp2 ))
+ #TODO
+ #   lcd.text_pixels(str(sp1)+"  ,  "+str(sp2), True, 30, 50, font='lubB24')
+ #   lcd.update()
+
+    if sp1 > 100 :
+        sp1 = 100
+    if sp1 < 0 :
+        sp1 = 0
+    if sp2 > 100 :
+        sp2 = 100
+    if sp2 < 0 :
+        sp2 = 0
+    #sleep(0.5)
+    rbt.on(sp1,sp2)
+    #Am.on(sp1)
+    #Dm.on(sp2)
+
+    if cs1.color == 3:
+        rbt.on_for_seconds(0, 20 ,1.5)
+
